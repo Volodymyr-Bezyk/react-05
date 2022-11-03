@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Title, AuthorName, Text, Wrap } from './Reviews.styled';
 import { getFilmReviews } from 'helpers/movieApi';
 import Box from 'components/Box';
@@ -9,7 +9,6 @@ import { dateFormatter } from 'helpers/dateFormatter';
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   const { movieId } = useParams();
-  const location = useLocation();
 
   useEffect(() => {
     const controller = new AbortController();
