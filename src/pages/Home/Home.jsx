@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getTrendingFilms } from 'helpers/movieApi';
 import MovieGalleryOnHomePage from 'components/MovieGalleryOnHomePage';
-import { useMemo } from 'react';
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
@@ -23,10 +22,7 @@ const Home = () => {
     };
   }, []);
 
-  const films = useMemo(() => {
-    return movies;
-  }, [movies]);
-  return <MovieGalleryOnHomePage movies={films} />;
+  return <MovieGalleryOnHomePage movies={movies} />;
 };
 
 export default Home;

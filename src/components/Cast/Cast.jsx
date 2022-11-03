@@ -41,6 +41,8 @@ const Cast = () => {
           {actors.map(({ id, profile_path, name, character }) => (
             <ListItem key={id}>
               <ActorImg
+                width="200"
+                height="300"
                 src={
                   profile_path
                     ? `https://image.tmdb.org/t/p/w200/${profile_path}`

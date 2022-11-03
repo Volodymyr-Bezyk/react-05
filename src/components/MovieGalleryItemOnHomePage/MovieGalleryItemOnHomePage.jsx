@@ -17,7 +17,8 @@ const MovieGalleryItemOnHomePage = ({ movie }) => {
             : notFound
         }
         alt={title}
-      ></Img>
+      />
+
       <Title>{title}</Title>
     </CardLink>
   );

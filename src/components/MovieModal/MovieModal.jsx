@@ -1,6 +1,7 @@
 import Box from 'components/Box';
 import { dateFormatter } from 'helpers/dateFormatter';
 import { useLocation } from 'react-router-dom';
+import noImage from '../../images/noImage.jpg';
 
 import {
   Modal,
@@ -29,7 +30,9 @@ const MovieModal = ({ movie }) => {
       <Modal>
         <Box display="flex">
           <ModalImg
-            src={`https://image.tmdb.org/t/p/w400/${poster}`}
+            width="400"
+            height="600"
+            src={poster ? `https://image.tmdb.org/t/p/w400/${poster}` : noImage}
             alt={title}
           />
 
@@ -48,10 +51,10 @@ const MovieModal = ({ movie }) => {
             </ul>
             <SubTitle>Additional information</SubTitle>
             <div>
-              <AddLink to="cast" state={{ from: location.state?.from }}>
+              <AddLink to="cast" end state={{ from: location.state?.from }}>
                 Cast
               </AddLink>
-              <AddLink to="reviews" state={{ from: location.state?.from }}>
+              <AddLink to="reviews" end state={{ from: location.state?.from }}>
                 Reviews
               </AddLink>
             </div>
