@@ -2,12 +2,13 @@ import { HiOutlineSearchCircle } from 'react-icons/hi';
 import Box from 'components/Box';
 import { InputField, FindBtn } from './SearchBar.styled';
 
-const SearchBar = ({ setSearchParams }) => {
+const SearchBar = ({ setSearchParams, isRenderWithNewQuery }) => {
   const formSubmithandler = e => {
     e.preventDefault();
     const form = e.currentTarget;
     const searchParam = form.elements.query.value.trim();
-    setSearchParams(searchParam ? { query: searchParam } : {});
+    setSearchParams(searchParam ? { query: searchParam, page: 1 } : {});
+    isRenderWithNewQuery.current = true;
     form.reset();
   };
 

@@ -6,12 +6,17 @@ import Box from 'components/Box';
 import SearchBar from 'components/SearchBar';
 import MovieGalleryOnMoviesPage from 'components/MovieGalleryOnMoviesPage';
 import Loader from 'components/Loader/Loader';
+import PaginatedItems from 'components/Pagination';
+import { useRef } from 'react';
 
 export const Movies = () => {
-  const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const movieName = searchParams.get('query');
+  const page = searchParams.get('page');
+  const [response, setResponse] = useState(null);
+
+  const isRenderWithNewQuery = useRef(true);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -20,17 +25,20 @@ export const Movies = () => {
     (async function searchMovies() {
       try {
         setIsLoading(true);
-        const result = await searchMoviesByName(movieName, controller);
-        setMovies(result.results);
+        const result = await searchMoviesByName(movieName, page, controller);
+        setResponse(result);
 
         if (result.results.length === 0) {
           toast.error(
             `Nothing found for your query ${movieName.toUpperCase()}`
           );
-
           return;
         }
-        toast.success(`Successfully found ${movieName.toUpperCase()}`);
+
+        if (isRenderWithNewQuery.current) {
+          toast.success(`Successfully found ${movieName.toUpperCase()}`);
+          isRenderWithNewQuery.current = false;
+        }
       } catch {
         return;
       } finally {
@@ -41,15 +49,28 @@ export const Movies = () => {
     return () => {
       controller.abort();
     };
-  }, [movieName]);
+  }, [movieName, page]);
 
   return (
     <div>
       <Box p={4}>
-        <SearchBar setSearchParams={setSearchParams} />
+        <SearchBar
+          setSearchParams={setSearchParams}
+          isRenderWithNewQuery={isRenderWithNewQuery}
+        />
       </Box>
       {isLoading && <Loader count={12} width={420} height={236} />}
-      {!isLoading && <MovieGalleryOnMoviesPage movies={movies} />}
+
+      {!isLoading && response && (
+        <div>
+          <MovieGalleryOnMoviesPage movies={response.results} />
+          <PaginatedItems
+            response={response}
+            setSearchParams={setSearchParams}
+            page={page}
+          />
+        </div>
+      )}
     </div>
   );
 };
