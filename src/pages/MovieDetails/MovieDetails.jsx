@@ -5,10 +5,12 @@ import { useParams } from 'react-router-dom';
 import { getFilmById } from 'helpers/movieApi';
 import { Backdrop, BackLink, LinkText } from './MovieDetails.styled';
 import MovieModal from 'components/MovieModal';
+import Loader from 'components/Loader/Loader';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const backLinkHref = location.state?.from ?? '/movies';
 
@@ -16,10 +18,13 @@ const MovieDetails = () => {
     const controller = new AbortController();
     (async function getFilm() {
       try {
+        setIsLoading(true);
         const result = await getFilmById(movieId, controller);
         setMovie(result);
       } catch {
         return;
+      } finally {
+        setIsLoading(false);
       }
     })();
 
@@ -35,7 +40,8 @@ const MovieDetails = () => {
         <BiArrowBack size={20} strokeWidth={1} display="block"></BiArrowBack>
         <LinkText>Go back</LinkText>
       </BackLink>
-      <MovieModal movie={movie} />
+      {isLoading && <Loader width={750} height={600} />}
+      {!isLoading && <MovieModal movie={movie} />}
       <Suspense fallback={null}>
         <Outlet />
       </Suspense>

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 export const MovieList = styled.ul`
   display: flex;
   flex-wrap: wrap;
-  align-items: top;
   justify-content: center;
   padding: ${p => p.theme.space[3]}px;
   gap: ${p => p.theme.space[3]}px;

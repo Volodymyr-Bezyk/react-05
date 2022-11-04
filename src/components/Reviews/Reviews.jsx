@@ -5,9 +5,11 @@ import { Title, AuthorName, Text, Wrap } from './Reviews.styled';
 import { getFilmReviews } from 'helpers/movieApi';
 import Box from 'components/Box';
 import { dateFormatter } from 'helpers/dateFormatter';
+import Loader from 'components/Loader/Loader';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const { movieId } = useParams();
 
   useEffect(() => {
@@ -15,10 +17,13 @@ const Reviews = () => {
 
     (async function getReviews() {
       try {
+        setIsLoading(true);
         const result = await getFilmReviews(movieId, controller);
         setReviews(result);
       } catch {
         return;
+      } finally {
+        setIsLoading(false);
       }
     })();
 
@@ -31,8 +36,9 @@ const Reviews = () => {
     <Box display="flex" justifyContent="center">
       <Wrap>
         <Title>Reviews</Title>
+        {isLoading && <Loader count={2} width={750} height={150} />}
 
-        {reviews.length > 0 && (
+        {!isLoading && reviews.length > 0 && (
           <ul>
             {reviews.map(({ id, author, content, updated_at: date }) => (
               <li key={id}>
@@ -52,7 +58,9 @@ const Reviews = () => {
           </ul>
         )}
 
-        {reviews.length === 0 && <AuthorName>No reviews yet</AuthorName>}
+        {!isLoading && reviews.length === 0 && (
+          <AuthorName>No reviews yet</AuthorName>
+        )}
       </Wrap>
     </Box>
   );

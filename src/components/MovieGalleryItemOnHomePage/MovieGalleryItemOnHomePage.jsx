@@ -9,8 +9,8 @@ const MovieGalleryItemOnHomePage = ({ movie }) => {
   return (
     <CardLink to={`movies/${id}`} state={{ from: location }}>
       <Img
-        width="500"
-        height="281"
+        height="236"
+        width="420"
         src={
           backdrop_path
             ? `https://image.tmdb.org/t/p/w500/${backdrop_path}`
